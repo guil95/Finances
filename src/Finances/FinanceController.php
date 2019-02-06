@@ -2,6 +2,7 @@
 
 namespace App\Finances;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FinanceController extends AbstractController
@@ -15,11 +16,17 @@ class FinanceController extends AbstractController
 
     /**
      * Matches /save exactly
-     * @Route("/save", name="testar")
+     * @Route("/save", name="save", methods={"GET"})
      */
     public function save()
     {
+        //Validar dados
         $this->financeService->save();
+
+        return JsonResponse::create([
+            'data' => null,
+            'message' => "Salvou"
+        ], JsonResponse::HTTP_CREATED);
     }
 
 }
