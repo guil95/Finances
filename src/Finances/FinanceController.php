@@ -23,6 +23,7 @@ class FinanceController extends AbstractController
      */
     public function save(Request $request)
     {
+        $request = json_decode($request->getContent());
         /**
          * {
             "description": "Conta de luz",
@@ -34,21 +35,20 @@ class FinanceController extends AbstractController
          */
 
         try{
-            FinanceValidator::isValid(json_decode($request->getContent()));
+            FinanceValidator::isValid($request);
         }catch (FinanceInvalidException $e){
             return JsonResponse::create([
                 'data' => null,
                 'message' => $e->getMessage()
             ], JsonResponse::HTTP_BAD_REQUEST);
         }catch (\Exception $e){
-            die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r($e->getMessage(), true) . "</pre>");
             return JsonResponse::create([
                 'data' => null,
                 'message' => "internal_server_error"
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $this->financeService->save();
+        $this->financeService->save($request);
 
         return JsonResponse::create([
             'data' => null,
