@@ -25,7 +25,7 @@ services:
         arguments:
             - App\Finances\FinanceEntity
 
-    finance_service:
+    repository.finance_service:
         class: \App\Finances\FinanceService
         arguments:
             - "@repository.finance_repository"
