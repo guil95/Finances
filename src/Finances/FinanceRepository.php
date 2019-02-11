@@ -3,10 +3,26 @@
 namespace App\Finances;
 
 
-class FinanceRepository
+use App\Exceptions\FinanceRepositoryException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
+class FinanceRepository extends ServiceEntityRepository
 {
-    public static function save()
+    public function __construct(RegistryInterface $registry)
     {
-        echo("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r(self::class, true) . "</pre>");
+        parent::__construct($registry, FinanceEntity::class);
+    }
+
+    public function save(FinanceEntity $finance)
+    {
+        try{
+            $em = $this->getEntityManager();
+            $em->persist($finance);
+            $em->flush();
+        }catch(\Exception $e){
+            throw new FinanceRepositoryException();
+        }
     }
 }

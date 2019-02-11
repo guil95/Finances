@@ -2,6 +2,7 @@
 
 namespace App\Finances;
 use App\Exceptions\FinanceInvalidException;
+use App\Exceptions\FinanceServiceException;
 use App\Validators\FinanceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,8 +19,8 @@ class FinanceController extends AbstractController
     }
 
     /**
-     * Matches /finance/save exactly
-     * @Route("/finance/save", name="save", methods={"POST"})
+     * Matches /finances exactly
+     * @Route("/finances", name="save", methods={"POST"})
      */
     public function save(Request $request)
     {
@@ -33,10 +34,15 @@ class FinanceController extends AbstractController
             "downPayment": false
             }
          */
-
         try{
             FinanceValidator::isValid($request);
+            $this->financeService->save($request);
         }catch (FinanceInvalidException $e){
+            return JsonResponse::create([
+                'data' => null,
+                'message' => $e->getMessage()
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }catch (FinanceServiceException $e){
             return JsonResponse::create([
                 'data' => null,
                 'message' => $e->getMessage()
@@ -48,7 +54,6 @@ class FinanceController extends AbstractController
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $this->financeService->save($request);
 
         return JsonResponse::create([
             'data' => null,
