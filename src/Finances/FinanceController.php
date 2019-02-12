@@ -3,6 +3,7 @@
 namespace App\Finances;
 use App\Exceptions\FinanceInvalidException;
 use App\Exceptions\FinanceServiceException;
+use App\Installments\InstallmentService;
 use App\Validators\FinanceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,10 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class FinanceController extends AbstractController
 {
     private $financeService;
+    private $installmentService;
 
-    public function __construct(FinanceService $financeService)
+    public function __construct(FinanceService $financeService, InstallmentService $installmentService)
     {
         $this->financeService = $financeService;
+        $this->installmentService = $installmentService;
     }
 
     /**
@@ -24,7 +27,7 @@ class FinanceController extends AbstractController
      */
     public function save(Request $request)
     {
-        $request = json_decode($request->getContent());
+        $request = json_decode($request->getContent(), true);
         /**
          * {
             "description": "Conta de luz",
@@ -36,7 +39,8 @@ class FinanceController extends AbstractController
          */
         try{
             FinanceValidator::isValid($request);
-            $this->financeService->save($request);
+            $finance = $this->financeService->save($request);
+            $this->installmentService->save($finance);
         }catch (FinanceInvalidException $e){
             return JsonResponse::create([
                 'data' => null,

@@ -2,13 +2,11 @@
 
 namespace App\Finances;
 
-
 use App\Exceptions\FinanceRepositoryException;
 use App\Exceptions\FinanceServiceException;
 
 class FinanceService
 {
-
     private $financeRepository;
 
     public function __construct(FinanceRepository $financeRepository)
@@ -19,13 +17,12 @@ class FinanceService
     /**
      * @param object $request
      */
-    public function save(object $request)
+    public function save(array $request): FinanceEntity
     {
         $finance = new FinanceEntity();
-        $finance->setDescription($request->description);
-
+        $finance->hidrate($request);
         try{
-            $this->financeRepository->save($finance);
+            return $this->financeRepository->save($finance);
         }catch (FinanceRepositoryException $e){
             throw new FinanceServiceException();
         }

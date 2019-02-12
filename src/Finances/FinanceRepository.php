@@ -2,7 +2,6 @@
 
 namespace App\Finances;
 
-
 use App\Exceptions\FinanceRepositoryException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping;
@@ -24,5 +23,7 @@ class FinanceRepository extends ServiceEntityRepository
         }catch(\Exception $e){
             throw new FinanceRepositoryException();
         }
+
+        return $finance;
     }
 }

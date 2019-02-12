@@ -2,6 +2,7 @@
 
 namespace App\Finances;
 
+use App\Facades\HidratorEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FinanceEntity
 {
+    //Use trait in all entities for this project
+    use HidratorEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

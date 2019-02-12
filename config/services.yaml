@@ -19,16 +19,27 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    repository.finance_repository:
+    app.repository.finance_repository:
         class: \App\Finances\FinanceRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - App\Finances\FinanceEntity
 
-    repository.finance_service:
+    app.repository.installment_repository:
+        class: \App\Installments\InstallmentRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - App\Installments\InstallmentEntity
+
+    app.service.finance_service:
         class: \App\Finances\FinanceService
         arguments:
-            - "@repository.finance_repository"
+            - "@app.repository.finance_repository"
+
+    app.service.installment_service:
+        class: \App\Installments\InstallmentService
+        arguments:
+            - "@app.repository.installment_repository"
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
