@@ -35,16 +35,16 @@ class FinanceSchema implements Schema
                     "minimum" => 0,
                 ],
                "type" => [
-                   "type" => "number",
+                   "type" => "integer",
                    "minimum" => 1,
-                   "maximun" => 2,
+                   "maximum" => 2,
                 ],
                "totalInstallments" => [
-                    "type" => "number",
+                    "type" => "integer",
                     "minimum" => 0,
                 ],
                 "downPayment" => [
-                    "type" => "boolean"
+                    "type" => "integer"
                 ],
             ]
         ];
