@@ -15,6 +15,7 @@ class FinanceValidator implements ValidatorInterface
 
         $validator = new Validator();
         $validator->validate($request, FinanceSchema::getSchema());
+
         if(!$validator->isValid()){
             throw new FinanceInvalidException();
         }

@@ -40,7 +40,7 @@ class FinanceController extends AbstractController
         try{
             FinanceValidator::isValid($request);
             $finance = $this->financeService->save($request);
-            $this->installmentService->save($finance);
+            //$this->installmentService->save($finance);
         }catch (FinanceInvalidException $e){
             return JsonResponse::create([
                 'data' => null,

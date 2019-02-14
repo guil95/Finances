@@ -4,9 +4,11 @@ namespace App\Finances;
 
 use App\Facades\HidratorEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass="App\Finances\FinanceRepository")
+ * @ORM\Table(name="finances")
  */
 class FinanceEntity
 {
@@ -31,17 +33,17 @@ class FinanceEntity
     private $value;
 
     /**
-     * @ORM\Column(type="int")
+     * @ORM\Column(type="integer")
      */
     private $type;
 
     /**
-     * @ORM\Column(type="int")
+     * @ORM\Column(type="integer")
      */
     private $totalInstallments;
 
     /**
-     * @ORM\Column(type="int")
+     * @ORM\Column(type="integer")
      */
     private $downPayment;
 

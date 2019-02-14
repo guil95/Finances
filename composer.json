@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "justinrainbow/json-schema": "^5.2",
+        "robmorgan/phinx": "^0.10.6",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/console": "4.2.*",
         "symfony/dependency-injection": "4.2.*",
@@ -49,7 +50,11 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "migrate":"vendor/bin/phinx migrate -e development"
+    },
+    "scripts-descriptions": {
+        "migrate": "Executa migração do banco de dados"
     },
     "conflict": {
         "symfony/symfony": "*"
