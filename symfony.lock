@@ -86,6 +86,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "guil95/hidrate": {
+        "version": "0.2.0"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },

@@ -2,9 +2,9 @@
 
 namespace App\Finances;
 
-use App\Facades\HidratorEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Hidrator\Hidrator;
 
 /**
  * @ORM\Entity(repositoryClass="App\Finances\FinanceRepository")
@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 class FinanceEntity
 {
     //Use trait in all entities for this project
-    use HidratorEntity;
+    use Hidrator;
 
     /**
      * @ORM\Id

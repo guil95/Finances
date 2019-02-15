@@ -15,7 +15,9 @@ class FinanceService
     }
 
     /**
-     * @param object $request
+     * @param array $request
+     * @return FinanceEntity
+     * @throws FinanceServiceException
      */
     public function save(array $request): FinanceEntity
     {
