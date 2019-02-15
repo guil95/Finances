@@ -8,15 +8,15 @@
 
 namespace App\Installments;
 
-use App\Facades\HidratorEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Hidrator\Hidrator;
 
 /**
  * @ORM\Entity(repositoryClass="App/Installments/InstallmentsRepository")
  */
 class InstallmentEntity
 {
-    use HidratorEntity;
+    use Hidrator;
 
     /**
      * @ORM\Id

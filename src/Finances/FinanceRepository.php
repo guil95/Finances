@@ -16,6 +16,7 @@ class FinanceRepository extends ServiceEntityRepository
 
     public function save(FinanceEntity $finance)
     {
+        die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r($finance, true) . "</pre>");
         try{
             $em = $this->getEntityManager();
             $em->persist($finance);
