@@ -26,9 +26,10 @@ class InstallmentEntity
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Finances\FinanceEntity", inversedBy="installments")
+     * @ORM\JoinColumn(name="id_finances", referencedColumnName="id")
      */
-    private $id_finance;
+    private $finance;
 
     /**
      * @ORM\Column(type="number")

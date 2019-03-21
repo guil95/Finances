@@ -4,6 +4,7 @@ namespace App\Finances;
 
 use App\Exceptions\FinanceRepositoryException;
 use App\Exceptions\FinanceServiceException;
+use App\Installments\InstallmentEntity;
 use Carbon\Carbon;
 
 class FinanceService
@@ -31,10 +32,56 @@ class FinanceService
             throw new FinanceServiceException('Down payment must be less than total value');
         }
 
+        $this->addInstallments($finance);
+
         try{
             return $this->financeRepository->add($finance);
         }catch (FinanceRepositoryException $e){
             throw new FinanceServiceException();
+        }
+    }
+
+    private function addInstallments(FinanceEntity $finance)
+    {
+        if($finance->getPaidInCash()){
+            $installment = new InstallmentEntity();
+            $installment->setIdFinance($finance->getId());
+            $installment->setMonth(Carbon::now()->month);
+            $installment->setYear(Carbon::now()->year);
+            $installment->setValue($finance->getValue());
+            $installment->setInstallmentNumber(1);
+            $installment->setPaidOut(1);
+
+            $finance->getInstallments()->add($installment);
+        } else {
+            $downPayment = false;
+
+            for ($i = 1; $i <= $finance->getTotalInstallments(); $i++){
+                $installments = new InstallmentEntity();
+                $installments->setIdFinance($finance->getId());
+                $installments->setInstallmentNumber($i);
+
+                if($finance->getDownPayment() && $downPayment === false){
+                    $downPayment = true;
+                    $installments->setMonth(Carbon::now()->month);
+                    $installments->setYear(Carbon::now()->year);
+                    $installments->setValue(
+                        $finance->getDownPayment()
+                    );
+                    $installments->setPaidOut(1);
+
+                    $finance->getInstallments()->add($installments);
+                    continue;
+                }
+
+                $installments->setMonth(Carbon::now()->add($i.' month')->month);
+                $installments->setYear(Carbon::now()->add($i.' month')->year);
+                $installments->setValue(
+                    round(($finance->getValue() - $finance->getDownPayment() ) / $finance->getTotalInstallments(), 2)
+                );
+                $installments->setPaidOut(0);
+                $finance->getInstallments()->add($installments);
+            }
         }
     }
 }

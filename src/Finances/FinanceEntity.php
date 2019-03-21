@@ -2,6 +2,7 @@
 
 namespace App\Finances;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Hidrator\Hidrator;
@@ -21,6 +22,11 @@ class FinanceEntity
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Installments\InstallmentEntity", mappedBy="finance", cascade={"persist", "remove"})
+     */
+    private $installments;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -61,6 +67,16 @@ class FinanceEntity
      * @ORM\Column(type="integer")
      */
     private $year;
+
+    public function __construct()
+    {
+        $this->installments = new ArrayCollection();
+    }
+
+    public function getInstallments(): ArrayCollection
+    {
+        return $this->installments;
+    }
 
     public function getTotalInstallments(): int
     {

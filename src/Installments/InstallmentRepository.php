@@ -33,13 +33,13 @@ class InstallmentRepository extends ServiceEntityRepository
         return $installments;
         try{
             $em = $this->getEntityManager();
-            $em->persist($installment);
+            $em->persist($installments);
             $em->flush();
             // cirar exception para esse erro
         }catch(\Exception $e){
             die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r($e, true) . "</pre>");
         }
 
-        return $installment;
+        return $installments;
     }
 }
