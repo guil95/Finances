@@ -34,13 +34,17 @@ class FinanceController extends AbstractController
             "value": 50,
             "type": 1,
             "totalInstallments": 0,
-            "downPayment": false
+            "downPayment": 0
             }
          */
         try{
             FinanceValidator::isValid($request);
             $finance = $this->financeService->save($request);
-            //$this->installmentService->save($finance);
+            $installments = $this->installmentService->save($finance);
+            die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r([
+                'finance' => $finance,
+                    'installments' => $installments
+                ], true) . "</pre>");
         }catch (FinanceInvalidException $e){
             return JsonResponse::create([
                 'data' => null,

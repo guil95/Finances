@@ -4,6 +4,7 @@ namespace App\Finances;
 
 use App\Exceptions\FinanceRepositoryException;
 use App\Exceptions\FinanceServiceException;
+use Carbon\Carbon;
 
 class FinanceService
 {
@@ -23,8 +24,15 @@ class FinanceService
     {
         $finance = new FinanceEntity();
         $finance->hidrate($request);
+        $finance->setYear(Carbon::now()->year);
+        $finance->setMonth(Carbon::now()->month);
+
+        if($finance->getDownPayment() >= $finance->getValue()){
+            throw new FinanceServiceException('Down payment must be less than total value');
+        }
+
         try{
-            return $this->financeRepository->save($finance);
+            return $this->financeRepository->add($finance);
         }catch (FinanceRepositoryException $e){
             throw new FinanceServiceException();
         }

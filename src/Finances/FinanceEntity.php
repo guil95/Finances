@@ -12,7 +12,7 @@ use Hidrator\Hidrator;
  */
 class FinanceEntity
 {
-    //Use trait in all entities for this project
+    //Usar trait em todas entidades
     use Hidrator;
 
     /**
@@ -43,9 +43,24 @@ class FinanceEntity
     private $totalInstallments;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="number")
      */
     private $downPayment;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $paidInCash;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $month;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $year;
 
     public function getTotalInstallments(): int
     {
@@ -57,12 +72,42 @@ class FinanceEntity
         $this->totalInstallments = $totalInstallments;
     }
 
-    public function getDownPayment(): int
+    public function getYear(): int
+    {
+        return $this->year;
+    }
+
+    public function setYear(int $year)
+    {
+        $this->year = $year;
+    }
+
+    public function getMonth(): int
+    {
+        return $this->month;
+    }
+
+    public function setMonth(int $month)
+    {
+        $this->month = $month;
+    }
+
+    public function getPaidInCash(): int
+    {
+        return $this->paidInCash;
+    }
+
+    public function setPaidInCash(int $paidInCash)
+    {
+        $this->paidInCash = $paidInCash;
+    }
+
+    public function getDownPayment(): float
     {
         return $this->downPayment;
     }
 
-    public function setDownPayment(int $downPayment)
+    public function setDownPayment(float $downPayment)
     {
         $this->downPayment = $downPayment;
     }
@@ -89,6 +134,7 @@ class FinanceEntity
 
     public function getId(): int
     {
+        return 1;
         return $this->id;
     }
 

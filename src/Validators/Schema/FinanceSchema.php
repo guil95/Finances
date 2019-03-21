@@ -16,6 +16,7 @@ class FinanceSchema implements Schema
         //type debito credito
         //downPayment se tem entrada
         //totalInstallments total parcelas
+        //paidInCash pagamento a vista
         return [
             "title" => "Finance",
             "type" => "object",
@@ -24,7 +25,8 @@ class FinanceSchema implements Schema
                 "value",
                 "type",
                 "totalInstallments",
-                "downPayment"
+                "downPayment",
+                "paidInCash"
             ],
             "properties" => [
                 "description" => [
@@ -44,7 +46,13 @@ class FinanceSchema implements Schema
                     "minimum" => 0,
                 ],
                 "downPayment" => [
-                    "type" => "integer"
+                    "type" => "number",
+                    "minimum" => 0
+                ],
+                "paidInCash" => [
+                    "type" => "integer",
+                    "minimum" => 0,
+                    "maximum" => 1
                 ],
             ]
         ];

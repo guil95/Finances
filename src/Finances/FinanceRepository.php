@@ -14,9 +14,10 @@ class FinanceRepository extends ServiceEntityRepository
         parent::__construct($registry, FinanceEntity::class);
     }
 
-    public function save(FinanceEntity $finance)
+    public function add(FinanceEntity $finance)
     {
-        die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r($finance, true) . "</pre>");
+        //remover
+        return $finance;
         try{
             $em = $this->getEntityManager();
             $em->persist($finance);
