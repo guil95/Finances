@@ -56,7 +56,7 @@ class FinanceService
         }
 
         $downPayment = false;
-        $value = $this->getValueInstallment($finance);
+        $value = $this->getInstallmentValue($finance);
 
         for ($i = 1; $i <= $finance->getTotalInstallments(); $i++){
             $installments = new InstallmentEntity();
@@ -88,7 +88,7 @@ class FinanceService
         }
     }
 
-    private function getValueInstallment(FinanceEntity $finance)
+    private function getInstallmentValue(FinanceEntity $finance)
     {
         if(!$finance->getDownPayment()){
             return round($finance->getValue() / $finance->getTotalInstallments(), 2);
