@@ -57,16 +57,6 @@ class InstallmentEntity
      */
     private $paidOut;
 
-    public function getIdFinance(): int
-    {
-        return $this->id_finance;
-    }
-
-    public function setIdFinance(int $id_finance)
-    {
-        $this->id_finance = $id_finance;
-    }
-
     public function getValue(): int
     {
         return $this->value;

@@ -45,7 +45,6 @@ class FinanceService
     {
         if($finance->getPaidInCash()){
             $installment = new InstallmentEntity();
-            $installment->setIdFinance($finance->getId());
             $installment->setMonth(Carbon::now()->month);
             $installment->setYear(Carbon::now()->year);
             $installment->setValue($finance->getValue());
@@ -55,10 +54,9 @@ class FinanceService
             $finance->getInstallments()->add($installment);
         } else {
             $downPayment = false;
-
+            $value = $this->getValueInstallment($finance);
             for ($i = 1; $i <= $finance->getTotalInstallments(); $i++){
                 $installments = new InstallmentEntity();
-                $installments->setIdFinance($finance->getId());
                 $installments->setInstallmentNumber($i);
 
                 if($finance->getDownPayment() && $downPayment === false){
@@ -77,11 +75,21 @@ class FinanceService
                 $installments->setMonth(Carbon::now()->add($i.' month')->month);
                 $installments->setYear(Carbon::now()->add($i.' month')->year);
                 $installments->setValue(
-                    round(($finance->getValue() - $finance->getDownPayment() ) / $finance->getTotalInstallments(), 2)
+                    $value
                 );
                 $installments->setPaidOut(0);
+
                 $finance->getInstallments()->add($installments);
             }
         }
+    }
+
+    private function getValueInstallment(FinanceEntity $finance)
+    {
+        if(!$finance->getDownPayment()){
+            return round($finance->getValue() / $finance->getTotalInstallments(), 2);
+        }
+
+        return round(($finance->getValue() - $finance->getDownPayment() ) / ($finance->getTotalInstallments() -1), 2);
     }
 }
