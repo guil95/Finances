@@ -11,6 +11,10 @@ use Carbon\Carbon;
 class FinanceService
 {
     private $financeRepository;
+    /**
+     * @var FinanceEntity
+     */
+    private $finance;
 
     public function __construct(FinanceRepository $financeRepository)
     {
@@ -24,76 +28,95 @@ class FinanceService
      */
     public function save(array $request): FinanceEntity
     {
-        $finance = new FinanceEntity();
-        $finance->hidrate($request);
-        $finance->setYear(Carbon::now()->year);
-        $finance->setMonth(Carbon::now()->month);
+        $this->finance = new FinanceEntity();
+        $this->finance->hidrate($request);
+        $this->finance->setYear(Carbon::now()->year);
+        $this->finance->setMonth(Carbon::now()->month);
 
-        if($finance->getDownPayment() >= $finance->getValue()){
+        if($this->finance->getDownPayment() >= $this->finance->getValue()){
             throw new FinanceServiceException('Down payment must be less than total value');
         }
 
-        $this->addInstallments($finance);
+        $this->addInstallments();
 
         try{
-            return $this->financeRepository->add($finance);
+            return $this->financeRepository->add($this->finance);
         }catch (FinanceRepositoryException $e){
             throw new FinanceServiceException();
         }
     }
 
-    private function addInstallments(FinanceEntity $finance)
+    private function addInstallments()
     {
-        if($finance->getPaidInCash()){
+        if($this->finance->getPaidInCash()){
             $installment = new InstallmentEntity();
             $installment->setMonth(Carbon::now()->month);
             $installment->setYear(Carbon::now()->year);
-            $installment->setValue($finance->getValue());
+            $installment->setValue($this->finance->getValue());
             $installment->setInstallmentNumber(1);
             $installment->setPaidOut(1);
 
-            return $finance->getInstallments()->add($installment);
+            return $this->finance->getInstallments()->add($installment);
         }
 
         $downPayment = false;
-        $value = $this->getInstallmentValue($finance);
+        $value = $this->getInstallmentValue();
 
-        for ($i = 1; $i <= $finance->getTotalInstallments(); $i++){
+        for ($i = 1; $i <= $this->finance->getTotalInstallments(); $i++){
             $installments = new InstallmentEntity();
 
             $installments->setInstallmentNumber($i);
 
-            if($finance->getDownPayment() && $downPayment === false){
+            if ($this->finance->getDownPayment() && $downPayment === false) {
                 $downPayment = true;
-
-                $installments->setMonth(Carbon::now()->month);
-                $installments->setYear(Carbon::now()->year);
-                $installments->setValue(
-                    $finance->getDownPayment()
-                );
-                $installments->setPaidOut(Constants::PAID_OUT);
-
-                $finance->getInstallments()->add($installments);
+                $this->addDownPayment($installments);
                 continue;
             }
 
             $installments->setMonth(Carbon::now()->add($i.' month')->month);
             $installments->setYear(Carbon::now()->add($i.' month')->year);
             $installments->setValue(
-                $value
+                $this->treateInstallmentValue($value, $i)
             );
             $installments->setPaidOut(Constants::UNPAID);
 
-            $finance->getInstallments()->add($installments);
+            $this->finance->getInstallments()->add($installments);
         }
     }
 
-    private function getInstallmentValue(FinanceEntity $finance)
+    private function treateInstallmentValue(float $value, int $numberInstallment): float
     {
-        if(!$finance->getDownPayment()){
-            return round($finance->getValue() / $finance->getTotalInstallments(), 2);
+        if ($numberInstallment == $this->finance->getTotalInstallments()) {
+            $installments = $this->finance->getDownPayment() > 0 ? $this->finance->getTotalInstallments() - 1 : $this->finance->getTotalInstallments();
+
+            $totalInstallments = $value * $installments + $this->finance->getDownPayment();
+
+            $restTotal = $this->finance->getValue() - $totalInstallments;
+
+            return $value + $restTotal;
         }
 
-        return round(($finance->getValue() - $finance->getDownPayment() ) / ($finance->getTotalInstallments() - 1), 2);
+        return $value;
+    }
+
+    private function addDownPayment(InstallmentEntity $installments)
+    {
+        $installments->setMonth(Carbon::now()->month);
+        $installments->setYear(Carbon::now()->year);
+        $installments->setValue(
+            $this->finance->getDownPayment()
+        );
+        $installments->setPaidOut(Constants::PAID_OUT);
+
+        $this->finance->getInstallments()->add($installments);
+    }
+
+    private function getInstallmentValue()
+    {
+        if (!$this->finance->getDownPayment()) {
+            return number_format($this->finance->getValue() / $this->finance->getTotalInstallments(), 2);
+        }
+
+        return number_format(($this->finance->getValue() - $this->finance->getDownPayment() ) / ($this->finance->getTotalInstallments() - 1), 2);
     }
 }
