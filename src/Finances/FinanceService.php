@@ -2,6 +2,7 @@
 
 namespace App\Finances;
 
+use App\Config\Constants;
 use App\Exceptions\FinanceRepositoryException;
 use App\Exceptions\FinanceServiceException;
 use App\Installments\InstallmentEntity;
@@ -51,36 +52,39 @@ class FinanceService
             $installment->setInstallmentNumber(1);
             $installment->setPaidOut(1);
 
-            $finance->getInstallments()->add($installment);
-        } else {
-            $downPayment = false;
-            $value = $this->getValueInstallment($finance);
-            for ($i = 1; $i <= $finance->getTotalInstallments(); $i++){
-                $installments = new InstallmentEntity();
-                $installments->setInstallmentNumber($i);
+            return $finance->getInstallments()->add($installment);
+        }
 
-                if($finance->getDownPayment() && $downPayment === false){
-                    $downPayment = true;
-                    $installments->setMonth(Carbon::now()->month);
-                    $installments->setYear(Carbon::now()->year);
-                    $installments->setValue(
-                        $finance->getDownPayment()
-                    );
-                    $installments->setPaidOut(1);
+        $downPayment = false;
+        $value = $this->getValueInstallment($finance);
 
-                    $finance->getInstallments()->add($installments);
-                    continue;
-                }
+        for ($i = 1; $i <= $finance->getTotalInstallments(); $i++){
+            $installments = new InstallmentEntity();
 
-                $installments->setMonth(Carbon::now()->add($i.' month')->month);
-                $installments->setYear(Carbon::now()->add($i.' month')->year);
+            $installments->setInstallmentNumber($i);
+
+            if($finance->getDownPayment() && $downPayment === false){
+                $downPayment = true;
+
+                $installments->setMonth(Carbon::now()->month);
+                $installments->setYear(Carbon::now()->year);
                 $installments->setValue(
-                    $value
+                    $finance->getDownPayment()
                 );
-                $installments->setPaidOut(0);
+                $installments->setPaidOut(Constants::PAID_OUT);
 
                 $finance->getInstallments()->add($installments);
+                continue;
             }
+
+            $installments->setMonth(Carbon::now()->add($i.' month')->month);
+            $installments->setYear(Carbon::now()->add($i.' month')->year);
+            $installments->setValue(
+                $value
+            );
+            $installments->setPaidOut(Constants::UNPAID);
+
+            $finance->getInstallments()->add($installments);
         }
     }
 
@@ -90,6 +94,6 @@ class FinanceService
             return round($finance->getValue() / $finance->getTotalInstallments(), 2);
         }
 
-        return round(($finance->getValue() - $finance->getDownPayment() ) / ($finance->getTotalInstallments() -1), 2);
+        return round(($finance->getValue() - $finance->getDownPayment() ) / ($finance->getTotalInstallments() - 1), 2);
     }
 }
