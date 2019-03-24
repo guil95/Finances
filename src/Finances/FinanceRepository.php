@@ -21,13 +21,24 @@ class FinanceRepository extends ServiceEntityRepository
         try{
             $em = $this->getEntityManager();
             $em->persist($finance);
-//            $em->($installment);
             $em->flush();
         }catch(\Exception $e){
-            die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r($e->getMessage(), true) . "</pre>");
             throw new FinanceRepositoryException();
         }
 
         return $finance;
     }
+
+    public function delete($id)
+    {
+        try{
+            $finance = $this->find($id);
+            $em = $this->getEntityManager();
+            $em->remove($finance);
+            $em->flush();
+        }catch(\Exception $e){
+            throw new FinanceRepositoryException();
+        }
+    }
+
 }

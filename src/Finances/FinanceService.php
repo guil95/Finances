@@ -46,6 +46,11 @@ class FinanceService
         }
     }
 
+    public function delete($id)
+    {
+        return $this->financeRepository->delete($id);
+    }
+
     private function addInstallments()
     {
         if($this->finance->getPaidInCash()){

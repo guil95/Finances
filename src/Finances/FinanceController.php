@@ -67,4 +67,18 @@ class FinanceController extends BaseController
         ], JsonResponse::HTTP_CREATED);
     }
 
+    /**
+     * Matches /finances exactly
+     * @Route("/finances/{id}", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     */
+    public function delete($id)
+    {
+        $finance = $this->financeService->delete($id);
+
+        return JsonResponse::create([
+            'data' => (array) $finance,
+            'message' => "ok"
+        ], JsonResponse::HTTP_OK);
+    }
+
 }
