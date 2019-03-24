@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Finances;
+use App\BaseController;
 use App\Exceptions\FinanceInvalidException;
 use App\Exceptions\FinanceServiceException;
 use App\Installments\InstallmentService;
@@ -8,15 +9,17 @@ use App\Validators\FinanceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FinanceController extends AbstractController
+class FinanceController extends BaseController
 {
     private $financeService;
     private $installmentService;
 
-    public function __construct(FinanceService $financeService, InstallmentService $installmentService)
+    public function __construct(FinanceService $financeService, InstallmentService $installmentService, RequestStack $requestStack)
     {
+        parent::__construct($requestStack);
         $this->financeService = $financeService;
         $this->installmentService = $installmentService;
     }
@@ -40,9 +43,6 @@ class FinanceController extends AbstractController
         try{
             FinanceValidator::isValid($request);
             $finance = $this->financeService->save($request);
-            die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r([
-                'finance' => $finance
-                ], true) . "</pre>");
         }catch (FinanceInvalidException $e){
             return JsonResponse::create([
                 'data' => null,
@@ -62,7 +62,7 @@ class FinanceController extends AbstractController
 
 
         return JsonResponse::create([
-            'data' => null,
+            'data' => (array) $finance,
             'message' => "Salvou"
         ], JsonResponse::HTTP_CREATED);
     }

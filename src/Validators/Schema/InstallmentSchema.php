@@ -23,7 +23,6 @@ class InstallmentSchema implements Schema
             "required" => [
                 "id_finance",
                 "value",
-                "type",
                 "month",
                 "year",
                 "installmentNumber"
@@ -39,11 +38,6 @@ class InstallmentSchema implements Schema
                 "installmentNumber" => [
                     "type" => "integer",
                     "minimum" => 1,
-                ],
-                "type" => [
-                    "type" => "integer",
-                    "minimum" => 1,
-                    "maximun" => 2,
                 ],
                 "month" => [
                     "type" => "integer",

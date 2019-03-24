@@ -13,6 +13,7 @@ use Hidrator\Hidrator;
 
 /**
  * @ORM\Entity(repositoryClass="App/Installments/InstallmentsRepository")
+ * @ORM\Table(name="installments")
  */
 class InstallmentEntity
 {
@@ -26,13 +27,12 @@ class InstallmentEntity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Finances\FinanceEntity", inversedBy="installments")
-     * @ORM\JoinColumn(name="id_finances", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="App\Finances\FinanceEntity", inversedBy="installments", cascade={"persist", "remove"})
      */
     private $finance;
 
     /**
-     * @ORM\Column(type="number")
+     * @ORM\Column(type="float")
      */
     private $value;
 
@@ -56,6 +56,16 @@ class InstallmentEntity
      * @ORM\Column(type="integer")
      */
     private $paidOut;
+
+    public function getFinance()
+    {
+        return $this->finance;
+    }
+
+    public function setFinance($finance)
+    {
+        $this->finance = $finance;
+    }
 
     public function getValue(): int
     {

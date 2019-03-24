@@ -3,7 +3,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class FinancesMigration extends AbstractMigration
+class InstallmentMigration extends AbstractMigration
 {
     /**
      * Change Method.
@@ -32,16 +32,15 @@ class FinancesMigration extends AbstractMigration
      */
     public function change()
     {
-        $local = $this->table('finances');
+        $local = $this->table('installments');
         $local
-            ->addColumn('description', 'string', ['limit' => 255])
+            ->addColumn('finance_id', 'integer')
             ->addColumn('value', 'float')
-            ->addColumn('type', 'integer')
-            ->addColumn('total_installments', 'integer')
-            ->addColumn('down_payment', 'integer')
-            ->addColumn('paid_in_cash', 'integer')
             ->addColumn('month', 'integer')
             ->addColumn('year', 'integer')
+            ->addColumn('installment_number', 'integer')
+            ->addColumn('paid_out', 'integer')
+            ->addForeignKey('finance_id', 'finances', 'id')
             ->create();
     }
 }

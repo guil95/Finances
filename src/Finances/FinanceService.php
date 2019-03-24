@@ -40,7 +40,7 @@ class FinanceService
         $this->addInstallments();
 
         try{
-            return $this->financeRepository->add($this->finance);
+            return $this->financeRepository->add($this->finance, $this->finance->getInstallments());
         }catch (FinanceRepositoryException $e){
             throw new FinanceServiceException();
         }
@@ -51,6 +51,7 @@ class FinanceService
         if($this->finance->getPaidInCash()){
             $installment = new InstallmentEntity();
             $installment->setMonth(Carbon::now()->month);
+            $installment->setFinance($this->finance);
             $installment->setYear(Carbon::now()->year);
             $installment->setValue($this->finance->getValue());
             $installment->setInstallmentNumber(1);
@@ -64,7 +65,7 @@ class FinanceService
 
         for ($i = 1; $i <= $this->finance->getTotalInstallments(); $i++){
             $installments = new InstallmentEntity();
-
+            $installments->setFinance($this->finance);
             $installments->setInstallmentNumber($i);
 
             if ($this->finance->getDownPayment() && $downPayment === false) {

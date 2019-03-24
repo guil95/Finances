@@ -24,7 +24,7 @@ class FinanceEntity
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Installments\InstallmentEntity", mappedBy="finance", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Installments\InstallmentEntity", mappedBy="finances", cascade={"persist", "remove"})
      */
     private $installments;
 
@@ -49,7 +49,7 @@ class FinanceEntity
     private $totalInstallments;
 
     /**
-     * @ORM\Column(type="number")
+     * @ORM\Column(type="float")
      */
     private $downPayment;
 
