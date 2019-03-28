@@ -33,8 +33,11 @@ class FinanceRepository extends ServiceEntityRepository
     public function delete($id)
     {
         try{
-            $finance = $this->find($id);
+            /**
+             * @var $finance FinanceEntity
+             */
             $em = $this->getEntityManager();
+            $finance = $em->find('App\Finances\FinanceEntity', $id);
             $em->remove($finance);
             $em->flush();
         }catch(\Exception $e){

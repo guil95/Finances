@@ -3,6 +3,7 @@
 namespace App\Finances;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Hidrator\Hidrator;
@@ -24,7 +25,7 @@ class FinanceEntity
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Installments\InstallmentEntity", mappedBy="finances", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Installments\InstallmentEntity", mappedBy="finance", cascade={"ALL"},  orphanRemoval=true)
      */
     private $installments;
 
@@ -73,7 +74,7 @@ class FinanceEntity
         $this->installments = new ArrayCollection();
     }
 
-    public function getInstallments(): ArrayCollection
+    public function getInstallments(): Collection
     {
         return $this->installments;
     }

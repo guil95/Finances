@@ -27,7 +27,8 @@ class InstallmentEntity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Finances\FinanceEntity", inversedBy="installments", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Finances\FinanceEntity", inversedBy="installments")
+     * @ORM\JoinColumn(name="finance_id", referencedColumnName="id", nullable=FALSE)
      */
     private $finance;
 
