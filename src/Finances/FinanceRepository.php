@@ -23,6 +23,7 @@ class FinanceRepository extends ServiceEntityRepository
             $em->persist($finance);
             $em->flush();
         }catch(\Exception $e){
+            die("<pre>" . __FILE__ . " - " . __LINE__ . "\n" . print_r($e->getMessage(), true) . "</pre>");
             throw new FinanceRepositoryException();
         }
 
