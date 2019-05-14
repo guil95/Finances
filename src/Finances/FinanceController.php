@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Finances;
+
 use App\BaseController;
-use App\Exceptions\FinanceInvalidException;
-use App\Exceptions\FinanceServiceException;
+use App\Exceptions\FinanceInvalid;
+use App\Exceptions\FinanceService;
 use App\Installments\InstallmentService;
 use App\Validators\FinanceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,7 @@ class FinanceController extends BaseController
 
     /**
      * Matches /finances exactly
+     *
      * @Route("/finances", name="save", methods={"POST"})
      */
     public function save(Request $request)
@@ -43,12 +45,12 @@ class FinanceController extends BaseController
         try{
             FinanceValidator::isValid($request);
             $finance = $this->financeService->save($request);
-        }catch (FinanceInvalidException $e){
+        }catch (FinanceInvalid $e){
             return JsonResponse::create([
                 'data' => null,
                 'message' => $e->getMessage()
             ], JsonResponse::HTTP_BAD_REQUEST);
-        }catch (FinanceServiceException $e){
+        }catch (FinanceService $e){
             return JsonResponse::create([
                 'data' => null,
                 'message' => $e->getMessage()
@@ -60,7 +62,6 @@ class FinanceController extends BaseController
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-
         return JsonResponse::create([
             'data' => (array) $finance,
             'message' => "Salvou"
@@ -69,6 +70,7 @@ class FinanceController extends BaseController
 
     /**
      * Matches /finances exactly
+     *
      * @Route("/finances/{id}", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
      */
     public function delete($id)
@@ -80,5 +82,4 @@ class FinanceController extends BaseController
             'message' => "ok"
         ], JsonResponse::HTTP_OK);
     }
-
 }

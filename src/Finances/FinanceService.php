@@ -3,8 +3,8 @@
 namespace App\Finances;
 
 use App\Config\Constants;
-use App\Exceptions\FinanceRepositoryException;
-use App\Exceptions\FinanceServiceException;
+use App\Exceptions\FinanceRepository;
+use App\Exceptions\FinanceService as FinanceServiceException;
 use App\Installments\InstallmentEntity;
 use Carbon\Carbon;
 
@@ -24,7 +24,7 @@ class FinanceService
     /**
      * @param array $request
      * @return FinanceEntity
-     * @throws FinanceServiceException
+     * @throws FinanceService
      */
     public function save(array $request): FinanceEntity
     {
@@ -41,7 +41,7 @@ class FinanceService
 
         try{
             return $this->financeRepository->add($this->finance, $this->finance->getInstallments());
-        }catch (FinanceRepositoryException $e){
+        }catch (FinanceRepository $e){
             throw new FinanceServiceException();
         }
     }
@@ -123,6 +123,6 @@ class FinanceService
             return number_format($this->finance->getValue() / $this->finance->getTotalInstallments(), 2);
         }
 
-        return number_format(($this->finance->getValue() - $this->finance->getDownPayment() ) / ($this->finance->getTotalInstallments() - 1), 2);
+        return number_format(($this->finance->getValue() - $this->finance->getDownPayment()) / ($this->finance->getTotalInstallments() - 1), 2);
     }
 }

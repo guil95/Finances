@@ -2,7 +2,7 @@
 
 namespace App\Validators;
 
-interface ValidatorInterface
+interface Validator
 {
     public static function isValid(array $request): bool;
 }

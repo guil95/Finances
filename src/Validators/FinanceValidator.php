@@ -2,22 +2,22 @@
 
 namespace App\Validators;
 
-use App\Exceptions\FinanceInvalidException;
+use App\Exceptions\FinanceInvalid;
 use App\Validators\Schema\FinanceSchema;
-use JsonSchema\Validator;
+use JsonSchema\Validator as JsonSchemaValidator;
 
-class FinanceValidator implements ValidatorInterface
+class FinanceValidator implements Validator
 {
 
     public static function isValid(array $request): bool
     {
         $request = (object) $request;
 
-        $validator = new Validator();
+        $validator = new JsonSchemaValidator();
         $validator->validate($request, FinanceSchema::getSchema());
 
         if(!$validator->isValid()){
-            throw new FinanceInvalidException();
+            throw new FinanceInvalid();
         }
 
         return true;

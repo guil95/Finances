@@ -2,7 +2,7 @@
 
 namespace App\Finances;
 
-use App\Exceptions\FinanceRepositoryException;
+use App\Exceptions\FinanceRepository as FinanceRepositoryException;
 use App\Installments\InstallmentEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;

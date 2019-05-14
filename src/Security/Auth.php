@@ -3,9 +3,6 @@
 namespace App\Security;
 
 
-use Symfony\Component\HttpFoundation\HeaderBag;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-
 class Auth
 {
     public static function checkHeader(array $header)

@@ -53,10 +53,12 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "migrate":"vendor/bin/phinx migrate -e development"
+        "migrate":  "vendor/bin/phinx migrate -e development",
+        "insights": "php ./vendor/bin/phpinsights"
     },
     "scripts-descriptions": {
-        "migrate": "Executa migração do banco de dados"
+        "migrate": "Executa migração do banco de dados",
+        "insights": "Executa análise de qualidade de código"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -68,6 +70,7 @@
         }
     },
     "require-dev": {
+        "nunomaduro/phpinsights": "^1.0",
         "symfony/web-server-bundle": "4.2.*"
     }
 }

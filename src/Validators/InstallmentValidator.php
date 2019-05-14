@@ -2,7 +2,7 @@
 
 namespace App\Validators;
 
-class InstallmentValidator implements ValidatorInterface
+class InstallmentValidator implements Validator
 {
     public static function isValid(array $request): bool
     {

@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: grodrigues
- * Date: 08/02/19
- * Time: 18:14
- */
 
 namespace App\Validators\Schema;
-
 
 class FinanceSchema implements Schema
 {
