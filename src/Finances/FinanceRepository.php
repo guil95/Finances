@@ -38,7 +38,7 @@ class FinanceRepository extends ServiceEntityRepository
              * @var $finance FinanceEntity
              */
             $em = $this->getEntityManager();
-            $finance = $this->find('App\Finances\FinanceEntity', $id);
+            $finance = $em->find('App\Finances\FinanceEntity', $id);
             $em->remove($finance);
             $em->flush();
         }catch(\Exception $e){

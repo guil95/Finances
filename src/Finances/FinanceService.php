@@ -43,16 +43,20 @@ class FinanceService
 
         $this->addInstallments();
 
-        try{
+        try {
             return $this->financeRepository->add($this->finance, $this->finance->getInstallments());
-        }catch (FinanceRepositoryException $e){
+        } catch (FinanceRepositoryException $e) {
             throw new FinanceServiceException();
         }
     }
 
     public function delete($id)
     {
-        return $this->financeRepository->delete($id);
+        try {
+          return $this->financeRepository->delete($id);
+        } catch (FinanceRepositoryExceptionption $e) {
+          throw new FinanceServiceException();
+        }
     }
 
     public function findOne($id)
