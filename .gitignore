@@ -13,3 +13,19 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs.dist
+/.php_cs
+/.php_cs.cache
+/phpcs.xml.dist
+###< friendsofphp/php-cs-fixer ###
+
+###docker logs###
+/docker/nginx/logs/finances.local.access.log
+/docker/nginx/logs/finances.local.error.log

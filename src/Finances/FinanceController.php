@@ -4,7 +4,7 @@ namespace App\Finances;
 
 use App\BaseController;
 use App\Exceptions\FinanceInvalid;
-use App\Exceptions\FinanceService;
+use App\Exceptions\FinanceService as FinanceServiceException;
 use App\Installments\InstallmentService;
 use App\Validators\FinanceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,7 +50,7 @@ class FinanceController extends BaseController
                 'data' => null,
                 'message' => $e->getMessage()
             ], JsonResponse::HTTP_BAD_REQUEST);
-        }catch (FinanceService $e){
+        }catch (FinanceServiceException $e){
             return JsonResponse::create([
                 'data' => null,
                 'message' => $e->getMessage()
@@ -73,13 +73,41 @@ class FinanceController extends BaseController
      *
      * @Route("/finances/{id}", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $finance = $this->financeService->delete($id);
 
         return JsonResponse::create([
             'data' => (array) $finance,
             'message' => "ok"
+        ], JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * Matches /finances exactly
+     *
+     * @Route("/finances/{id}", name="findOne", methods={"GET"}, requirements={"id"="\d+"})
+     */
+    public function findOne(int $id)
+    {
+        $finance = $this->financeService->findOne($id);
+
+        return JsonResponse::create([
+           'data' => $finance
+        ], JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * Matches /finances exactly
+     *
+     * @Route("/finances/{id}/installments", name="findInstallmentsByFinance", methods={"GET"}, requirements={"id"="\d+"})
+     */
+    public function findInstallmentsByFinance(int $id)
+    {
+        $finance = $this->financeService->findInstallmentsByFinance($id);
+
+        return JsonResponse::create([
+            'data' => $finance
         ], JsonResponse::HTTP_OK);
     }
 }

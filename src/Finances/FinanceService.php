@@ -3,10 +3,14 @@
 namespace App\Finances;
 
 use App\Config\Constants;
-use App\Exceptions\FinanceRepository;
+use App\Exceptions\FinanceRepository as FinanceRepositoryException;
 use App\Exceptions\FinanceService as FinanceServiceException;
 use App\Installments\InstallmentEntity;
+use App\Installments\InstallmentRepository;
+use App\Installments\InstallmentService;
 use Carbon\Carbon;
+use League\Container\Exception\NotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FinanceService
 {
@@ -41,7 +45,7 @@ class FinanceService
 
         try{
             return $this->financeRepository->add($this->finance, $this->finance->getInstallments());
-        }catch (FinanceRepository $e){
+        }catch (FinanceRepositoryException $e){
             throw new FinanceServiceException();
         }
     }
@@ -51,12 +55,33 @@ class FinanceService
         return $this->financeRepository->delete($id);
     }
 
+    public function findOne($id)
+    {
+        $finance = $this->financeRepository->findFinanceById($id);
+
+        if (!$finance) {
+            throw new NotFoundException('Finance not found');
+        }
+
+        return $finance;
+    }
+
+    public function findInstallmentsByFinance($id)
+    {
+        $installments = $this->financeRepository->findInstallmentsByFinance($id);
+
+        if (!$installments) {
+            throw new NotFoundException('Installments not found');
+        }
+
+        return $installments;
+    }
+
     private function addInstallments()
     {
         if($this->finance->getPaidInCash()){
             $installment = new InstallmentEntity();
             $installment->setMonth(Carbon::now()->month);
-            $installment->setFinance($this->finance);
             $installment->setYear(Carbon::now()->year);
             $installment->setValue($this->finance->getValue());
             $installment->setInstallmentNumber(1);

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Hidrator\Hidrator;
 
 /**
- * @ORM\Entity(repositoryClass="App/Installments/InstallmentsRepository")
+ * @ORM\Entity(repositoryClass="App\Installments\InstallmentRepository")
  * @ORM\Table(name="installments")
  */
 class InstallmentEntity
