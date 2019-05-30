@@ -7,6 +7,7 @@ use App\Exceptions\FinanceInvalidException;
 use App\Exceptions\FinanceServiceException;
 use App\Installments\InstallmentService;
 use App\Validators\FinanceValidator;
+use Doctrine\DBAL\Exception\ServerException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,12 @@ class FinanceController extends BaseController
         try{
             FinanceValidator::isValid($request);
             $finance = $this->financeService->save($request);
+
+            return JsonResponse::create([
+                'data' => $finance->toArray(),
+                'message' => "Salvou"
+            ], JsonResponse::HTTP_CREATED);
+
         }catch (FinanceInvalidException $e){
             return JsonResponse::create([
                 'data' => null,
@@ -61,11 +68,6 @@ class FinanceController extends BaseController
                 'message' => "internal_server_error"
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return JsonResponse::create([
-            'data' => $finance->toArray(),
-            'message' => "Salvou"
-        ], JsonResponse::HTTP_CREATED);
     }
 
     /**
@@ -91,12 +93,20 @@ class FinanceController extends BaseController
      */
     public function delete(int $id)
     {
-        $finance = $this->financeService->delete($id);
+        try {
+            $finance = $this->financeService->delete($id);
 
-        return JsonResponse::create([
-            'data' => (array) $finance,
-            'message' => "ok"
-        ], JsonResponse::HTTP_OK);
+            return JsonResponse::create([
+                'data' => (array) $finance,
+                'message' => "ok"
+            ], JsonResponse::HTTP_OK);
+
+        } catch(FinanceServiceException $e) {
+            return JsonResponse::create([
+                'data' => null,
+                'message' => $e->getMessage()
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
