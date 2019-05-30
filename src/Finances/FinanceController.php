@@ -75,10 +75,12 @@ class FinanceController extends BaseController
      */
     public function findAll(Request $request)
     {
-        $finance = $this->financeService->findAll($request->query->all());
+        $finances = $this->financeService->findAll(
+            $request->query->all()
+        );
 
         return JsonResponse::create([
-            'data' => $finance
+            'data' => $finances
         ], JsonResponse::HTTP_OK);
     }
 
