@@ -151,7 +151,6 @@ class FinanceEntity
 
     public function getId(): int
     {
-        return 1;
         return $this->id;
     }
 
@@ -168,5 +167,20 @@ class FinanceEntity
     public function setDescription(string $description)
     {
         $this->description = $description;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'description' => $this->description,
+            'value' => $this->value,
+            'type' => $this->type,
+            'totalInstallments' => $this->totalInstallments,
+            'downPayment' => $this->downPayment,
+            'paidInCash' => $this->paidInCash,
+            'month' => $this->month,
+            'year' => $this->year,
+        ];
     }
 }

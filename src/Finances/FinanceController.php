@@ -63,7 +63,7 @@ class FinanceController extends BaseController
         }
 
         return JsonResponse::create([
-            'data' => (array) $finance,
+            'data' => $finance->toArray(),
             'message' => "Salvou"
         ], JsonResponse::HTTP_CREATED);
     }
