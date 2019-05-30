@@ -74,6 +74,18 @@ class FinanceService
         return $finance;
     }
 
+    public function findAll(array $params)
+    {
+
+        $finances = $this->financeRepository->findAllFinances($params);
+
+        if (!$finances) {
+            throw new NotFoundException('Finances not found');
+        }
+
+        return $finances;
+    }
+
     public function findInstallmentsByFinance($id)
     {
         $installments = $this->financeRepository->findInstallmentsByFinance($id);

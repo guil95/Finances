@@ -71,6 +71,20 @@ class FinanceController extends BaseController
     /**
      * Matches /finances exactly
      *
+     * @Route("/finances", name="findAll", methods={"GET"})
+     */
+    public function findAll(Request $request)
+    {
+        $finance = $this->financeService->findAll($request->query->all());
+
+        return JsonResponse::create([
+            'data' => $finance
+        ], JsonResponse::HTTP_OK);
+    }
+
+    /**
+     * Matches /finances exactly
+     *
      * @Route("/finances/{id}", name="delete", methods={"DELETE"}, requirements={"id"="\d+"})
      */
     public function delete(int $id)

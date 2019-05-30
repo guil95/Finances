@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class FinanceRepository extends ServiceEntityRepository
@@ -55,6 +56,17 @@ class FinanceRepository extends ServiceEntityRepository
             ->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function findAllFinances(array $params)
+    {
+        $queryBuilder = $this->createQueryBuilder('f')
+            ->select();
+
+        return $this->treatParameters($queryBuilder, $params)
+            ->getQuery()
+            ->getResult(Query::HYDRATE_ARRAY);
+    }
+
+
     public function findInstallmentsByFinance(int $id)
     {
         $em = $this->getEntityManager();
@@ -68,6 +80,27 @@ class FinanceRepository extends ServiceEntityRepository
             ->where('i.finance = :id')->setParameter('id', $id)
             ->getQuery()
             ->getResult(Query::HYDRATE_ARRAY);
+    }
+
+    private function treatParameters(QueryBuilder $queryBuilder, array $params): QueryBuilder
+    {
+        if (isset($params['initialMonth'])) {
+            $queryBuilder->andWhere('f.month >= :initialMonth')->setParameter('initialMonth', $params['initialMonth']);
+        }
+
+        if (isset($params['finalMonth'])) {
+            $queryBuilder->andWhere('f.month <= :finalMonth')->setParameter('finalMonth', $params['finalMonth']);
+        }
+
+        if (isset($params['initialYear'])) {
+            $queryBuilder->andWhere('f.year >= :initialYear')->setParameter('initialYear', $params['initialYear']);
+        }
+
+        if (isset($params['finalYear'])) {
+            $queryBuilder->andWhere('f.year <= :finalYear')->setParameter('finalYear', $params['finalYear']);
+        }
+
+        return $queryBuilder;
     }
 
 }
