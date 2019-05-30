@@ -17,7 +17,6 @@ sudo nano /etc/hosts and add 127.0.0.1 finances.local
 # Payloads
 `
  [POST] http://finances.local/finances
- If paidInCash equals 1, the total installations and the downPayment will be irrelevant, but the total installations must be >= 1
 `
 ```json
 {
@@ -30,3 +29,6 @@ sudo nano /etc/hosts and add 127.0.0.1 finances.local
 }
 
 ```
+`
+ If paidInCash equals 1, the total installations and the downPayment will be irrelevant, but the total installations must be >= 1
+`
