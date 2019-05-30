@@ -36,7 +36,7 @@ class FinanceSchema implements Schema
                 ],
                "totalInstallments" => [
                     "type" => "integer",
-                    "minimum" => 0,
+                    "minimum" => 1,
                 ],
                 "downPayment" => [
                     "type" => "number",
