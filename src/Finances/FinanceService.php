@@ -54,7 +54,7 @@ class FinanceService
     {
         try {
           return $this->financeRepository->delete($id);
-        } catch (FinanceRepositoryExceptionption $e) {
+        } catch (FinanceRepositoryException $e) {
           throw new FinanceServiceException();
         }
     }
@@ -85,6 +85,7 @@ class FinanceService
     {
         if($this->finance->getPaidInCash()){
             $installment = new InstallmentEntity();
+            $installment->setFinance($this->finance);
             $installment->setMonth(Carbon::now()->month);
             $installment->setYear(Carbon::now()->year);
             $installment->setValue($this->finance->getValue());
