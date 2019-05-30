@@ -3,8 +3,8 @@
 namespace App\Finances;
 
 use App\BaseController;
-use App\Exceptions\FinanceInvalid;
-use App\Exceptions\FinanceService as FinanceServiceException;
+use App\Exceptions\FinanceInvalidException;
+use App\Exceptions\FinanceServiceException;
 use App\Installments\InstallmentService;
 use App\Validators\FinanceValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,7 +45,7 @@ class FinanceController extends BaseController
         try{
             FinanceValidator::isValid($request);
             $finance = $this->financeService->save($request);
-        }catch (FinanceInvalid $e){
+        }catch (FinanceInvalidException $e){
             return JsonResponse::create([
                 'data' => null,
                 'message' => $e->getMessage()

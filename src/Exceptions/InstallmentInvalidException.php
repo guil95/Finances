@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-class InstallmentInvalid extends \Exception
+class InstallmentInvalidException extends \Exception
 {
     public function  __construct($message = "Installment is invalid, please verify all fields", $code = 0, \Throwable $previous = null)
     {

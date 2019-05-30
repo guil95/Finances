@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-class FinanceRepository extends \Exception
+class FinanceRepositoryException extends \Exception
 {
     public function  __construct($message = "finance_repository_exception", $code = 0, \Throwable $previous = null)
     {

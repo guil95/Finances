@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-class FinanceInvalid extends \Exception
+class FinanceInvalidException extends \Exception
 {
     public function  __construct($message = "Finance is invalid, please verify all fields", $code = 0, \Throwable $previous = null)
     {

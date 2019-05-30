@@ -2,7 +2,7 @@
 
 namespace App\Validators;
 
-use App\Exceptions\FinanceInvalid;
+use App\Exceptions\FinanceInvalidException;
 use App\Validators\Schema\FinanceSchema;
 use JsonSchema\Validator as JsonSchemaValidator;
 
@@ -17,7 +17,7 @@ class FinanceValidator implements Validator
         $validator->validate($request, FinanceSchema::getSchema());
 
         if(!$validator->isValid()){
-            throw new FinanceInvalid();
+            throw new FinanceInvalidException();
         }
 
         return true;

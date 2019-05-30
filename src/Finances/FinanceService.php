@@ -3,8 +3,8 @@
 namespace App\Finances;
 
 use App\Config\Constants;
-use App\Exceptions\FinanceRepository as FinanceRepositoryException;
-use App\Exceptions\FinanceService as FinanceServiceException;
+use App\Exceptions\FinanceRepositoryException;
+use App\Exceptions\FinanceServiceException;
 use App\Installments\InstallmentEntity;
 use App\Installments\InstallmentRepository;
 use App\Installments\InstallmentService;
