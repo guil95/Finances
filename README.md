@@ -13,3 +13,18 @@ sudo nano /etc/hosts and add 127.0.0.1 finances.local
 [GET] http://finances.local/finances/{id}
 [GET] http://finances.local/finances/{id}/installments
 ```
+
+# Payloads
+```
+[POST] http://finances.local/finances
+{
+  "description": "Description",
+	"value": 1200,
+	"type": 2,
+	"totalInstallments": 1,
+	"downPayment": 0,
+	"paidInCash": 1
+}
+
+If paidInCash is equals 1 the totalInstallments and downPayment is irrelevant but totalInstallments must be >= 1
+```
