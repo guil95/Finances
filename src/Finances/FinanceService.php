@@ -41,6 +41,10 @@ class FinanceService
             throw new FinanceServiceException('Down payment must be less than total value');
         }
 
+        if($this->finance->getDownPayment() && $this->finance->getPaidInCash()){
+            throw new FinanceServiceException('The finance is paid in cash dont is necessary entry payment');
+        }
+
         $this->addInstallments();
 
         try {
